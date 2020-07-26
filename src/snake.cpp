@@ -84,6 +84,28 @@ void Snake::Update() {
   }
 }
 
+void Snake::setDirection(Direction newDirection) {
+  Snake::Direction opposite;
+  switch(newDirection) {
+    case Snake::Direction::kDown: 
+      opposite = Snake::Direction::kUp; 
+      break;
+    case Snake::Direction::kUp: 
+      opposite = Snake::Direction::kDown;
+      break;
+    case Snake::Direction::kLeft: 
+      opposite = Snake::Direction::kRight; 
+      break;
+    case Snake::Direction::kRight: 
+      opposite = Snake::Direction::kLeft;
+      break;
+  }
+  std::unique_lock<std::mutex> lock(_mtx);
+  if (direction != opposite || size == 1) 
+    direction = newDirection;
+  return;
+}
+
 void Snake::UpdateHead() {
   std::unique_lock<std::mutex> lock(_mtx);
   switch (direction) {
@@ -105,8 +127,12 @@ void Snake::UpdateHead() {
   }
 
   // Wrap the Snake around to the beginning if going off of the screen.
-  head_x = fmod(head_x + grid_width, grid_width);
-  head_y = fmod(head_y + grid_height, grid_height);
+  //head_x = fmod(head_x + grid_width, grid_width);
+ // head_y = fmod(head_y + grid_height, grid_height);
+  if( (head_x  + grid_width <= grid_width) || (grid_width - head_x  < 1) || (head_y  + grid_height <= grid_height) || (grid_height - head_y < 1) ) {
+     std::cout << "BOOM!!... " << std::endl;
+     alive = false;
+  }
 }
 
 void Snake::UpdateBody(SDL_Point &current_head_cell, SDL_Point &prev_head_cell) {

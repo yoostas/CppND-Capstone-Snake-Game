@@ -33,6 +33,7 @@ class Snake {
   Snake &operator=(const Snake &sourceSnake); 
   Snake(Snake &&sourceSnake);
   Snake &operator=(Snake &&sourceSnake); 
+  void setDirection(Direction newDirection);
 
  private:
   void UpdateHead();

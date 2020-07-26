@@ -53,6 +53,28 @@ bool Renderer::Render(Snake const snake, SDL_Point const &food) {
   block.y = food.y * block.h;
   SDL_RenderFillRect(sdl_renderer, &block);
 
+  // Render borders
+  SDL_Rect border;
+  border.w = screen_width / grid_width;
+  border.h = screen_height / grid_height;
+
+  for (int i = 0; i < grid_width; i++) {
+    for(int j = 0; j < grid_height; j++) {
+      if (i == 0 || i == (grid_width - 1)) {
+        SDL_SetRenderDrawColor(sdl_renderer, 0x01, 0x23, 0x43, 0x01);
+        border.x = i * border.w;
+        border.y = j * border.h;
+        SDL_RenderFillRect(sdl_renderer, &border);
+      }
+      if (j == 0 || j == (grid_height - 1)) {
+        SDL_SetRenderDrawColor(sdl_renderer, 0x01, 0x23, 0x43, 0x01);
+        border.x = i * border.w;
+        border.y = j * border.h;
+        SDL_RenderFillRect(sdl_renderer, &border);
+      }
+    }
+  }
+
   // Render snake's body
   SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
   for (SDL_Point const &point : snake.body) {
@@ -74,7 +96,7 @@ bool Renderer::Render(Snake const snake, SDL_Point const &food) {
   // Update Screen
   SDL_RenderPresent(sdl_renderer);
   if(!snake.alive) {
-    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "GAME OVER", "Press OK", sdl_window);
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "GAME OVER", "Press OK to close the GAME!", sdl_window);
     SDL_DestroyWindow(sdl_window);
     return true;
  }
