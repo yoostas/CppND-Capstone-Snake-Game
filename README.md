@@ -8,6 +8,27 @@ The Capstone Project gives you a chance to integrate what you've learned through
 
 In this project, you can build your own C++ application or extend this Snake game, following the principles you have learned throughout this Nanodegree Program. This project will demonstrate that you can independently create applications using a wide range of C++ features.
 
+## The project demonstrates an understanding of C++ functions and control structures.
+Classes extends via adding new functions. Loops used for UI rendering.
+
+## The project uses Object Oriented Programming techniques.
+New classes are added with class attributes and class methods.
+
+## Classes use appropriate access specifiers for class members.
+Class attributes and class methods are divided by public and private.
+
+## The project uses scope / Resource Acquisition Is Initialization (RAII) where appropriate.
+Using of std::unique_lock for locking the mutex.
+
+## The project follows the Rule of 5. 
+For Snake class.
+
+## The project uses smart pointers instead of raw pointers.
+Class Manager is uses smart pinters.
+
+
+
+
 ## Dependencies for Running Locally
 * cmake >= 3.7
   * All OSes: [click here for installation instructions](https://cmake.org/install/)
