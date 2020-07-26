@@ -61,13 +61,13 @@ bool Renderer::Render(Snake const snake, SDL_Point const &food) {
   for (int i = 0; i < grid_width; i++) {
     for(int j = 0; j < grid_height; j++) {
       if (i == 0 || i == (grid_width - 1)) {
-        SDL_SetRenderDrawColor(sdl_renderer, 0x01, 0x23, 0x43, 0x01);
+        SDL_SetRenderDrawColor(sdl_renderer, 0x01, 0x46, 0x37, 0x20);
         border.x = i * border.w;
         border.y = j * border.h;
         SDL_RenderFillRect(sdl_renderer, &border);
       }
       if (j == 0 || j == (grid_height - 1)) {
-        SDL_SetRenderDrawColor(sdl_renderer, 0x01, 0x23, 0x43, 0x01);
+        SDL_SetRenderDrawColor(sdl_renderer, 0x01, 0x46, 0x37, 0x20);
         border.x = i * border.w;
         border.y = j * border.h;
         SDL_RenderFillRect(sdl_renderer, &border);
