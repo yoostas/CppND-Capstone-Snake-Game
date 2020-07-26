@@ -38,7 +38,7 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(Snake const snake, SDL_Point const &food) {
+bool Renderer::Render(Snake const snake, SDL_Point const &food) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
@@ -73,6 +73,11 @@ void Renderer::Render(Snake const snake, SDL_Point const &food) {
 
   // Update Screen
   SDL_RenderPresent(sdl_renderer);
+  if(!snake.alive) {
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "GAME OVER", "Press OK", sdl_window);
+    SDL_DestroyWindow(sdl_window);
+    return true;
+ }
 }
 
 void Renderer::UpdateWindowTitle(int score, int fps) {
