@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "SDL.h"
+#include <mutex>
 
 class Snake {
  public:
@@ -28,6 +29,11 @@ class Snake {
   float head_y;
   std::vector<SDL_Point> body;
 
+  Snake(const Snake &sourceSnake);
+  Snake &operator=(const Snake &sourceSnake); 
+  Snake(Snake &&sourceSnake);
+  Snake &operator=(Snake &&sourceSnake); 
+
  private:
   void UpdateHead();
   void UpdateBody(SDL_Point &current_cell, SDL_Point &prev_cell);
@@ -35,6 +41,7 @@ class Snake {
   bool growing{false};
   int grid_width;
   int grid_height;
+  mutable std::mutex _mtx;
 };
 
 #endif

@@ -2,6 +2,71 @@
 #include <cmath>
 #include <iostream>
 
+//Rule of Five implementation
+
+Snake::Snake(const Snake &sourceSnake) {
+    std::unique_lock<std::mutex> mLock(_mtx);
+    std::unique_lock<std::mutex> mLockSource(sourceSnake._mtx);
+    speed = sourceSnake.speed;
+    grid_height = sourceSnake.grid_height;
+    grid_width = sourceSnake.grid_width;
+    size = sourceSnake.size;
+    alive = sourceSnake.alive;
+    head_x = sourceSnake.head_x;
+    head_y = sourceSnake.head_y;
+    growing = sourceSnake.growing;
+    body = sourceSnake.body;
+}
+
+
+Snake::Snake(Snake &&sourceSnake) {
+    std::unique_lock<std::mutex> mLock(_mtx);
+    std::unique_lock<std::mutex> mLockSource(sourceSnake._mtx);
+    grid_height = sourceSnake.grid_height;
+    grid_width = sourceSnake.grid_width;
+    speed = sourceSnake.speed;
+    size = sourceSnake.size;
+    alive = sourceSnake.alive;
+    head_x = sourceSnake.head_x;
+    head_y = sourceSnake.head_y;
+    growing = sourceSnake.growing;
+    body = std::move(sourceSnake.body);
+}
+
+Snake &Snake::operator=(const Snake &sourceSnake) {
+  	if (this == &sourceSnake)
+        return *this;
+    std::unique_lock<std::mutex> mLock(_mtx);
+    std::unique_lock<std::mutex> mLockSource(sourceSnake._mtx);
+    grid_height = sourceSnake.grid_height;
+    grid_width = sourceSnake.grid_width;
+    speed = sourceSnake.speed;
+    size = sourceSnake.size;
+    alive = sourceSnake.alive;
+    head_x = sourceSnake.head_x;
+    head_y = sourceSnake.head_y;
+    growing = sourceSnake.growing;
+    body = sourceSnake.body;
+    return *this;
+}
+
+
+Snake &Snake::operator=(Snake &&sourceSnake) { 
+    if (this == &sourceSnake) return *this;
+    std::unique_lock<std::mutex> mLock(_mtx);
+    std::unique_lock<std::mutex> mLockSource(sourceSnake._mtx);
+    grid_height = sourceSnake.grid_height;
+    grid_width = sourceSnake.grid_width;
+    speed = sourceSnake.speed;
+    size = sourceSnake.size;
+    alive = sourceSnake.alive;
+    head_x = sourceSnake.head_x;
+    head_y = sourceSnake.head_y;
+    growing = sourceSnake.growing;
+    body = std::move(sourceSnake.body);
+    return *this;
+}
+
 void Snake::Update() {
   SDL_Point prev_cell{
       static_cast<int>(head_x),
@@ -20,6 +85,7 @@ void Snake::Update() {
 }
 
 void Snake::UpdateHead() {
+  std::unique_lock<std::mutex> lock(_mtx);
   switch (direction) {
     case Direction::kUp:
       head_y -= speed;
@@ -44,6 +110,7 @@ void Snake::UpdateHead() {
 }
 
 void Snake::UpdateBody(SDL_Point &current_head_cell, SDL_Point &prev_head_cell) {
+  std::unique_lock<std::mutex> lock(_mtx);
   // Add previous head location to vector
   body.push_back(prev_head_cell);
 
@@ -63,10 +130,14 @@ void Snake::UpdateBody(SDL_Point &current_head_cell, SDL_Point &prev_head_cell) 
   }
 }
 
-void Snake::GrowBody() { growing = true; }
+void Snake::GrowBody() { 
+  std::unique_lock<std::mutex> lock(_mtx);
+  growing = true; 
+}
 
 // Inefficient method to check if cell is occupied by snake.
 bool Snake::SnakeCell(int x, int y) {
+  std::unique_lock<std::mutex> lock(_mtx);
   if (x == static_cast<int>(head_x) && y == static_cast<int>(head_y)) {
     return true;
   }
